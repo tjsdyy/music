@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPriceId, stripe } from "@/lib/stripe";
+import { getPriceId, getStripeClient } from "@/lib/stripe";
 import type { BillingCycle } from "@/types/pricing";
 
 type CheckoutBody = {
@@ -22,6 +22,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "NEXT_PUBLIC_APP_URL 未配置" }, { status: 500 });
     }
 
+    const stripe = getStripeClient();
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       payment_method_types: ["card"],
