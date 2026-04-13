@@ -5,6 +5,8 @@ import type { BillingCycle } from "@/types/pricing";
 type CheckoutBody = {
   planId?: string;
   cycle?: BillingCycle;
+  userId?: string;
+  email?: string;
 };
 
 export async function POST(request: Request) {
@@ -27,6 +29,13 @@ export async function POST(request: Request) {
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
+      client_reference_id: body.userId,
+      customer_email: body.email,
+      metadata: {
+        planId,
+        cycle,
+        userId: body.userId || "",
+      },
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
       allow_promotion_codes: true,

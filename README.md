@@ -5,7 +5,7 @@
 - 首页（品牌首屏 + 工具模块）
 - 灵感页（创意任务列表）
 - 价格页（套餐展示 + 订阅按钮）
-- Stripe 支付（Checkout Session API + 成功/取消回跳）
+- Stripe 支付（Checkout Session API + Webhook + 成功/取消回跳）
 
 ## 1) 安装依赖
 
@@ -41,3 +41,20 @@ npm run dev
 
 - Success: `/success`
 - Cancel: `/cancel`
+
+Webhook 地址：
+
+- `/api/stripe/webhook`
+
+本地联调 webhook（需安装 Stripe CLI）：
+
+```bash
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+```
+
+建议在 Stripe Dashboard 订阅以下事件：
+
+- `checkout.session.completed`
+- `invoice.payment_succeeded`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
